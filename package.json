@@ -1,0 +1,29 @@
+{
+  "name": "ve",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nsi88/ve.git"
+  },
+  "author": "sergey novikov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nsi88/ve/issues"
+  },
+  "homepage": "https://github.com/nsi88/ve#readme",
+  "dependencies": {
+    "mustache": "^2.1.2"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.6",
+    "browserify-shim": "^3.8.9"
+  },
+  "browserify": {
+    "transform": ["browserify-shim"]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  }
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VE</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="assets/build.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- top panel -->
+      <div class="row">
+        <div class="col-xs-2">
+          <input type="file" class="btn btn-default" id="add" multiple="true" />
+        </div>
+        <div class="col-xs-10">
+        </div>
+      </div>
+      <div class="row">
+        <!-- files list -->
+        <div class="col-xs-2">
+          <div id="files">
+          </div>
+        </div>
+        <!-- player -->
+        <div class="col-xs-10">
+          <div class="row">
+            <div class="col-xs-12">
+              <video id="player" height="480px"></video>
+            </div>
+          </div>
+          <!-- timeline -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div id="timeline"></div>
+            </div>
+          </div>
+          <!-- controls -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div id="controls"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- video audio slices -->
+      <div class="row" id="video" style="height:100px;">
+      </div>
+      <div class="row" id="audio" style="height:100px;">
+      </div>
+    </div>
+
+    <!-- file template -->
+    <script id="file" type="x-tmpl-mustache">
+      <div class="file">
+        <img src="" width="200px" /><br />
+        {{file.name}} (<small>{{file.size}}</small>)<br />
+      </div>
+    </script>
+  </body>
+</html>
