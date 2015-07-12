@@ -1,7 +1,7 @@
 {
   "camelcase": true,
   "curly": true,
-  "eqeqeq": true,
+  "eqeqeq": false,
   "expr" : true,
   "forin": true,
   "immed": true,

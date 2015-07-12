@@ -1,0 +1,9 @@
+../../../../Build/Makefiles/Rules.mak:60: Mp4Fragment.d: Нет такого файла или каталога
+gcc -MM -D_REENTRANT   -I../../../../Source/C++/Core -I../../../../Source/C++/Config -I../../../../Source/C++/MetaData -I../../../../Source/C++/System/StdC -I../../../../Source/C++/Crypto -I../../../../Source/C++/Codecs ../../../../Source/C++/Apps/Mp4Fragment/Mp4Fragment.cpp -o Mp4Fragment.d
+g++ -fPIC -Wall -Wshadow -Wpointer-arith -Wcast-qual   -g  -D_REENTRANT   -I../../../../Source/C++/Core -I../../../../Source/C++/Config -I../../../../Source/C++/MetaData -I../../../../Source/C++/System/StdC -I../../../../Source/C++/Crypto -I../../../../Source/C++/Codecs -c ../../../../Source/C++/Apps/Mp4Fragment/Mp4Fragment.cpp -o Mp4Fragment.o
+g++ -L. Mp4Fragment.o -o mp4fragment -lAP4
+
+
+ffmpeg version 2.2.1 Copyright (c) 2000-2014 the FFmpeg developers
+  built on Jun  9 2014 20:24:32 with emcc (Emscripten GCC-like replacement) 1.12.0 (commit 6960d2296299e96d43e694806f5d35799ef8d39c)
+  configuration: --cc=emcc --prefix=/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist --extra-cflags='-I/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/include -v' --enable-cross-compile --target-os=none --arch=x86_32 --cpu=generic --disable-ffplay --disable-ffprobe --disable-ffserver --disable-asm --disable-doc --disable-devices --disable-pthreads --disable-w32threads --disable-network --disable-hwaccels --disable-parsers --disable-bsfs --disable-debug --disable-protocols --disable-indevs --disable-outdevs --enable-protocol=file --enable-libvpx --enable-gpl --extra-libs='/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/lib/libx264.a /Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/lib/libvpx.a'
