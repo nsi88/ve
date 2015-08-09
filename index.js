@@ -6,6 +6,7 @@ $(function(){
   var mustache = require('mustache');
   var preprocessor = new Worker('./lib/preprocessor.js');
   var files = [];
+  prepareOutputDir();
 
   preprocessor.onmessage = function(event) {
     var m = event.data;
@@ -18,6 +19,44 @@ $(function(){
       console.error(m.data);
     }
   };
+
+  // Удалить из output временные файлы
+  // Загрузить подготовленные файлы
+  function prepareOutputDir() {
+    var r = webkitRequestFileSystem || requestFileSystem;
+    if (!r) {
+      throw('File System API is not supported');
+    }
+    r(PERSISTENT, 1, function(fs) {
+      // XXX output is hardcoded 
+      fs.root.getDirectory('output', { create: true }, function(dir) {
+        var reader = dir.createReader();
+        function read(reader) {
+          reader.readEntries(function(entries) {
+            if (entries.length) {
+              for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isFile) {
+                  console.log('delete', entries[i].name);
+                  entries[i].remove(function() {
+                  }, function(err) {
+                    console.error(err);
+                  })
+                }
+              }
+              read(reader);
+            }
+          }, function(err) {
+            console.error(err);
+          });
+        }
+        read(reader);
+      }, function(err) {
+        console.error(err);
+      });
+    }, function(err) {
+      console.error(err);
+    });
+  }
 
   function requestQuota(size, callback) {
     if (typeof navigator.webkitPersistentStorage !== 'undefined') {
