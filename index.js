@@ -6,7 +6,10 @@ $(function(){
   var mustache = require('mustache');
   var preprocessor = new Worker('./lib/preprocessor.js');
   var files = [];
-  prepareOutputDir();
+  clear();
+  window.onbeforeunload = function() { 
+    return 'Выйти?';
+  };
 
   preprocessor.onmessage = function(event) {
     var m = event.data;
@@ -22,37 +25,33 @@ $(function(){
 
   // Удалить из output временные файлы
   // Загрузить подготовленные файлы
-  function prepareOutputDir() {
+  function clear() {
     var r = webkitRequestFileSystem || requestFileSystem;
     if (!r) {
       throw('File System API is not supported');
     }
-    r(PERSISTENT, 1, function(fs) {
+    r(TEMPORARY, 1, function(fs) {
       // XXX output is hardcoded 
-      fs.root.getDirectory('output', { create: true }, function(dir) {
-        var reader = dir.createReader();
-        function read(reader) {
-          reader.readEntries(function(entries) {
-            if (entries.length) {
-              for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isFile) {
-                  console.log('delete', entries[i].name);
-                  entries[i].remove(function() {
-                  }, function(err) {
-                    console.error(err);
-                  })
+      var reader = fs.root.createReader();
+      function read(reader) {
+        reader.readEntries(function(entries) {
+          if (entries.length) {
+            for (var i = 0; i < entries.length; i++) {
+              if (confirm('Удалить ' + entries[i].name + '?')) {
+                if (entries[i].isDirectory) {
+                  entries[i].removeRecursively(function() {}, function(err) { console.error(err); })
+                } else if (entries[i].isFile) {
+                  entries[i].remove(function() {}, function(err) { console.error(err); })
                 }
               }
-              read(reader);
             }
-          }, function(err) {
-            console.error(err);
-          });
-        }
-        read(reader);
-      }, function(err) {
-        console.error(err);
-      });
+            read(reader);
+          }
+        }, function(err) {
+          console.error(err);
+        });
+      }
+      read(reader);
     }, function(err) {
       console.error(err);
     });
@@ -90,14 +89,14 @@ $(function(){
     var size = Math.ceil(files.reduce(function(sum, file) { return sum + file.size }, 0) * 2.5);
 
     var _this = $(this)[0];
-    requestQuota(size, function(err, grantedBytes) {
-      if (err) {
-        console.error(err);
-      } else {
+    // requestQuota(size, function(err, grantedBytes) {
+      // if (err) {
+      //   console.error(err);
+      // } else {
         for (var i = 0; i < _this.files.length; i++) {
-          preprocessor.postMessage({ file: _this.files[i], grantedBytes: grantedBytes });
+          preprocessor.postMessage({ file: _this.files[i], grantedBytes: size });
         }
-      }
-    });
+      // }
+    // });
   });
 });
