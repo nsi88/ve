@@ -7,3 +7,22 @@ g++ -L. Mp4Fragment.o -o mp4fragment -lAP4
 ffmpeg version 2.2.1 Copyright (c) 2000-2014 the FFmpeg developers
   built on Jun  9 2014 20:24:32 with emcc (Emscripten GCC-like replacement) 1.12.0 (commit 6960d2296299e96d43e694806f5d35799ef8d39c)
   configuration: --cc=emcc --prefix=/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist --extra-cflags='-I/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/include -v' --enable-cross-compile --target-os=none --arch=x86_32 --cpu=generic --disable-ffplay --disable-ffprobe --disable-ffserver --disable-asm --disable-doc --disable-devices --disable-pthreads --disable-w32threads --disable-network --disable-hwaccels --disable-parsers --disable-bsfs --disable-debug --disable-protocols --disable-indevs --disable-outdevs --enable-protocol=file --enable-libvpx --enable-gpl --extra-libs='/Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/lib/libx264.a /Users/bgrinstead/Sites/videoconverter.js/build/ffmpeg/../dist/lib/libvpx.a'
+
+
+~/devel/emsdk_portable/emscripten/tag-1.34.1/emcc -o Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Fragment/Mp4Fragment.bc -c -pedantic -Wall -W -Wundef -Wno-long-long -D_REENTRANT -O3 -D_REENTRANT -DAP4_PLATFORM_BYTE_ORDER=AP4_PLATFORM_BYTE_ORDER_LITTLE_ENDIAN -ISource/Config -ISource/C++/Core -ISource/C++/Crypto -ISource/C++/MetaData -ISource/C++/System/StdC -ISource/C++/System/Posix -ISource/C++/Codecs Source/C++/Apps/Mp4Fragment/Mp4Fragment.cpp
+ 1717  ~/devel/emsdk_portable/emscripten/tag-1.34.1/emcc -03 -o Build/Targets/x86_64-unknown-linux/Release/libBento4.bc Build/Targets/x86_64-unknown-linux/Release/libBento4.a
+ 1720  ~/devel/emsdk_portable/emscripten/tag-1.34.1/emcc -03 -o Build/Targets/x86_64-unknown-linux/Release/mp4fragment.js Build/Targets/x86_64-unknown-linux/Release/libBento4.bc Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Fragment/Mp4Fragment.bc 
+ 1744  emcc
+ 1745  sudo ln -s ~/devel/emsdk_portable/emscripten/tag-1.34.1/emcc /usr/local/bin/emcc
+ 1746  emcc --help
+ 1747  emcc -o Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Fragment/Mp4Fragment.bc -c -pedantic -Wall -W -Wundef -Wno-long-long -D_REENTRANT -O3 -D_REENTRANT -DAP4_PLATFORM_BYTE_ORDER=AP4_PLATFORM_BYTE_ORDER_LITTLE_ENDIAN -ISource/Config -ISource/C++/Core -ISource/C++/Crypto -ISource/C++/MetaData -ISource/C++/System/StdC -ISource/C++/System/Posix -ISource/C++/Codecs Source/C++/Apps/Mp4Fragment/Mp4Fragment.cpp
+ 1753  chmod 0777 install_by_emcc.sh 
+ 1755  ./install_by_emcc.sh 
+ 1762  emcc -o Build/Targets/x86_64-unknown-linux/Release/mp4fragment.js Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Fragment/Mp4Fragment.bc Build/Targets/x86_64-unknown-linux/Release/libBento4.bc
+ 1763  emcc -o Build/Targets/x86_64-unknown-linux/Release/mp4fragment.js -03 Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Fragment/Mp4Fragment.bc Build/Targets/x86_64-unknown-linux/Release/libBento4.bc
+
+g++ -o Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Split/Mp4Split.o -c -pedantic -Wall -W -Wundef -Wno-long-long -D_REENTRANT -O3 -D_REENTRANT -DAP4_PLATFORM_BYTE_ORDER=AP4_PLATFORM_BYTE_ORDER_LITTLE_ENDIAN -ISource/Config -ISource/C++/Core -ISource/C++/Crypto -ISource/C++/MetaData -ISource/C++/System/StdC -ISource/C++/System/Posix -ISource/C++/Codecs Source/C++/Apps/Mp4Split/Mp4Split.cpp
+g++ -o Build/Targets/x86_64-unknown-linux/Release/mp4split Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Split/Mp4Split.o Build/Targets/x86_64-unknown-linux/Release/libBento4.a
+
+emcc -o Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Split/Mp4Split.bc -c -pedantic -Wall -W -Wundef -Wno-long-long -D_REENTRANT -O3 -D_REENTRANT -DAP4_PLATFORM_BYTE_ORDER=AP4_PLATFORM_BYTE_ORDER_LITTLE_ENDIAN -ISource/Config -ISource/C++/Core -ISource/C++/Crypto -ISource/C++/MetaData -ISource/C++/System/StdC -ISource/C++/System/Posix -ISource/C++/Codecs Source/C++/Apps/Mp4Split/Mp4Split.cpp
+emcc -o Build/Targets/x86_64-unknown-linux/Release/mp4split.js -03 Build/Targets/x86_64-unknown-linux/Release/C++/Apps/Mp4Split/Mp4Split.bc Build/Targets/x86_64-unknown-linux/Release/libBento4.bc
