@@ -6,6 +6,8 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var mustache = require('mustache');
   var preprocessor = new Worker('./lib/preprocessor.js');
   var files = {};
+  var Player = require('./lib/player.js');
+  var player = new Player('player');
   
   // clear previous files
   var reader = fs.root.createReader();
@@ -57,6 +59,12 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
       files[file.name] = file;
       preprocessor.postMessage({ file: file });
     }
+  });
+
+  $('#files').on('click', '.file', function() {
+    var file = files[$(this).data('name')];
+    console.debug('play', file);
+    player.play(file);
   });
 }, function(err) {
   console.error(err);

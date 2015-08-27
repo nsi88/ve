@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nsi88/ve.git"
+    "url": "https://bitbucket.org/sin8/ve.git"
   },
   "author": "sergey novikov",
   "license": "ISC",
@@ -14,11 +14,11 @@
   },
   "homepage": "https://github.com/nsi88/ve#readme",
   "dependencies": {
-    "mustache": "^2.1.2"
+    "mustache": "2.1.2"
   },
   "devDependencies": {
-    "browserify": "^10.2.6",
-    "browserify-shim": "^3.8.9"
+    "browserify": "10.2.6",
+    "browserify-shim": "3.8.9"
   },
   "browserify": {
     "transform": ["browserify-shim"]
