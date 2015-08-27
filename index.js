@@ -7,8 +7,8 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var preprocessor = new Worker('./lib/preprocessor.js');
   var files = {};
   var Player = require('./lib/player.js');
-  var player = new Player('player');
-  
+  var player = new Player('player', 'timeline');
+
   // clear previous files
   var reader = fs.root.createReader();
   function read(reader) {
