@@ -7,7 +7,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var preprocessor = new Worker('./lib/preprocessor.js');
   var files = {};
   var Player = require('./lib/player.js');
-  var player = new Player('player', 'timeline');
+  var player = new Player('player', 'timeline', 'controls');
 
   // clear previous files
   var reader = fs.root.createReader();
@@ -57,7 +57,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
       var file = $(this)[0].files[i];
       $('#files').append(mustache.render($('#file').html(), { file: file }));
       files[file.name] = file;
-      preprocessor.postMessage({ file: file });
+      // preprocessor.postMessage({ file: file });
     }
   });
 

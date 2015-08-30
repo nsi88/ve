@@ -30,14 +30,38 @@
           <!-- timeline -->
           <div class="row">
             <div class="col-xs-12">
-              <input id="timeline" type="range" step="0.1" value="0"  style="width:480px; display:none;"></div>
+              <div id="timeline" style="width:480px; margin-bottom:6px; display:none;">
+                <span style="position:absolute; float:left; font-size:32px; top:-14px; z-index:-1; display:none;" class="left-border">[</span>
+                <input class="range" type="range" step="0.1" value="0">
+                <span style="position:absolute; float:left; font-size:32px; top:-14px; z-index:-1; display:none;" class="right-border">]</span>
+              </div>
             </div>
           </div>
           <!-- controls -->
           <div class="row">
-            <div class="col-xs-12">
-              <div id="controls"></div>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+              <div id="controls" style="width:480px; display:none;">
+                <button type="button" class="btn btn-default fast-backward">
+                  <span class="glyphicon glyphicon-backward"></span>
+                </button>
+                <button type="button" class="btn btn-default backward">
+                  <span class="glyphicon glyphicon-triangle-left"></span>
+                </button>
+                <button type="button" class="btn btn-default left-border">[</button>
+                <button type="button" class="btn btn-default play-pause">
+                  <span class="glyphicon glyphicon-play"></span>
+                </button>
+                <button type="button" class="btn btn-default right-border">]</button>
+                <button type="button" class="btn btn-default forward">
+                  <span class="glyphicon glyphicon-triangle-right"></span>
+                </button>
+                <button type="button" class="btn btn-default fast-forward">
+                  <span class="glyphicon glyphicon-forward"></span>
+                </button>
+              </div>
             </div>
+            <div class="col-xs-1"></div>
           </div>
         </div>
       </div>
