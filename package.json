@@ -25,5 +25,8 @@
   },
   "browserify-shim": {
     "jquery": "global:jQuery"
+  },
+  "scripts": {
+    "build": "browserify index.js > assets/build.js"
   }
 }

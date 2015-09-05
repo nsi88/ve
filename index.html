@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VE</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap-theme.min.css">
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
     <script src="assets/build.js"></script>
   </head>
   <body>
@@ -59,6 +59,9 @@
                 <button type="button" class="btn btn-default fast-forward">
                   <span class="glyphicon glyphicon-forward"></span>
                 </button>
+                <button type="button" class="btn btn-default slice">
+                  <span class="glyphicon glyphicon-ok"></span>
+                </button>
               </div>
             </div>
             <div class="col-xs-1"></div>
@@ -77,6 +80,13 @@
       <div class="file" style="cursor:pointer;" data-name="{{file.name}}">
         <img src="" height="50px" /><br />
         {{file.name}} (<small>{{file.size}}</small>)<br />
+      </div>
+    </script>
+
+    <script id="slice" type="x-tmpl-mustache">
+      <div class="slice" style="cursor:pointer;" data-id="{{slice.id}}">
+        <img src="{{slice.image}}" height="50px" /><br />
+        {{slice.file.name}}
       </div>
     </script>
   </body>
