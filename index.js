@@ -7,10 +7,9 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var preprocessor = new Worker('./lib/preprocessor.js?' + Math.random());
   var processor = new Worker('./lib/processor.js?' + Math.random());
   var files = {};
-  var videoSlices = [];
   var Player = require('./lib/player.js');
-  var player = new Player('player', 'timeline', 'controls');
-  var Slice = require('./lib/slice.js');
+  var player = new Player({ videoId: 'player', timelineId: 'timeline', controlsId: 'controls' });
+  var MediaFile = require('./lib/media_file.js');
 
   // clear previous files
   var reader = fs.root.createReader();
@@ -41,77 +40,74 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   preprocessor.onmessage = function(event) {
     var m = event.data;
     console.debug('preprocessor', m);
-    var file = files[m.file];
-    file[m.attr] = m.value;
-    if (m.attr == 'images') {
-      // NOTE главной устанавливаем либо 2-ю либо 0-ю картинку
-      fs.root.getFile(file.outputDirectory + '/' + (m.value[2] || m.value[0]), {}, function(image) {
-        console.debug('image', image);
-        $('.file[data-name="' + file.name + '"] img').attr('src', image.toURL());
+    var mf = files[m.name];
+    mf[m.attr] = m.value;
+    if (m.attr == 'thumbnail') {
+      fs.root.getFile(mf.thumbnail, {}, function(thumbnail) {
+        console.debug('thumbnail', thumbnail);
+        $('.file[data-name="' + mf.name + '"] img').attr('src', thumbnail.toURL());
       }, function(err) {
         console.error(err);
       });
-    } else if (m.attr == 'state') {
-      if (m.value === 'ready') {
-        console.debug('files', files);
-        if (file.type.indexOf('video') === 0) {
-          for (var sliceId in videoSlices) {
-            var slice = videoSlices[sliceId];
-            if (slice.file) {
-              console.debug(slice);
-              if (slice.file.name === file.name) {
-                processor.postMessage({ slice: slice.dump() });
-              }
-            }
-          }
-        }
-      }
+    } else if (m.attr == 'fragmented' && m.value) {
+      console.debug('files', files);
+      //   if (f.type === 'video') {
+      //     for (var sliceId in videoSlices) {
+      //       var slice = videoSlices[sliceId];
+      //       if (slice.file) {
+      //         console.debug(slice);
+      //         if (slice.file.name === file.name) {
+      //           processor.postMessage({ slice: slice.dump() });
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     }
   };
 
   $('#add').change(function() {
     for (var i = 0; i < $(this)[0].files.length; i++) {
-      var file = $(this)[0].files[i];
-      $('#files').append(mustache.render($('#file').html(), { file: file }));
-      files[file.name] = file;
-      preprocessor.postMessage({ file: file });
+      var mf = new MediaFile({ file: $(this)[0].files[i] });
+      files[mf.name] = mf;
+      $('#files').append(mustache.render($('#file').html(), { file: mf }));
+      preprocessor.postMessage(mf.workerMessage());
     }
   });
 
-  function addSlice(slice) {
-    if (slice.file.type.indexOf('video') === 0) {
-      $('#video').append(mustache.render($('#slice').html(), { slice: slice }));
-      videoSlices[slice.id] = slice;
-      if (slice.file.state == 'ready') {
-        processor.postMessage({ slice: slice.dump() });
-      } else {
-        console.debug('enqueue', slice);
-      }
-    }
-  }
+  // function addSlice(slice) {
+  //   if (slice.file.type.indexOf('video') === 0) {
+  //     $('#video').append(mustache.render($('#slice').html(), { slice: slice }));
+  //     videoSlices[slice.id] = slice;
+  //     if (slice.file.state == 'ready') {
+  //       processor.postMessage({ slice: slice.dump() });
+  //     } else {
+  //       console.debug('enqueue', slice);
+  //     }
+  //   }
+  // }
 
-  player.onslice = function(src, start, finish) {
-    src = files[src.name];
-    console.debug('slice src', src);
-    var slice = new Slice(src, start, finish);
-    console.debug('slice', slice);
-    if (slice.image) {
-      fs.root.getFile(slice.image, {}, function(image) {
-        slice.image = image.toURL();
-        addSlice(slice);
-      }, function(err) {
-        console.error(err);
-      });
-    } else {
-      addSlice(slice);
-    }
-  };
+  // player.onslice = function(src, start, finish) {
+  //   src = files[src.name];
+  //   console.debug('slice src', src);
+  //   var slice = new Slice(src, start, finish);
+  //   console.debug('slice', slice);
+  //   if (slice.image) {
+  //     fs.root.getFile(slice.image, {}, function(image) {
+  //       slice.image = image.toURL();
+  //       addSlice(slice);
+  //     }, function(err) {
+  //       console.error(err);
+  //     });
+  //   } else {
+  //     addSlice(slice);
+  //   }
+  // };
 
   $('#files').on('click', '.file', function() {
-    var file = files[$(this).data('name')];
-    console.debug('play', file);
-    player.load(file);
-    // TODO call play in callback
+    var f = files[$(this).data('name')];
+    console.debug('play', f);
+    player.load(f);
     player.play();
   });
 }, function(err) {
