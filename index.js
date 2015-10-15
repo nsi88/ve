@@ -8,7 +8,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var processor = new Worker('./lib/processor.js?' + Math.random());
   var files = {};
   var Player = require('./lib/player.js');
-  var player = new Player({ videoId: 'player', timelineId: 'timeline', controlsId: 'controls' });
+  var player = new Player({ fs: fs, videoId: 'player', timelineId: 'timeline', controlsId: 'controls' });
   var MediaFile = require('./lib/media_file.js');
 
   // clear previous files
