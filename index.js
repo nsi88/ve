@@ -10,6 +10,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var Player = require('./lib/player.js');
   var player = new Player({ fs: fs, videoId: 'player', timelineId: 'timeline', controlsId: 'controls' });
   var MediaFile = require('./lib/media_file.js');
+  var Slice = require('./lib/slice.js');
 
   // clear previous files
   var reader = fs.root.createReader();
@@ -68,7 +69,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
 
   $('#add').change(function() {
     for (var i = 0; i < $(this)[0].files.length; i++) {
-      var mf = new MediaFile({ file: $(this)[0].files[i] });
+      var mf = new MediaFile($(this)[0].files[i]);
       files[mf.name] = mf;
       $('#files').append(mustache.render($('#file').html(), { file: mf }));
       preprocessor.postMessage(mf.workerMessage());
@@ -87,10 +88,10 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   //   }
   // }
 
-  // player.onslice = function(src, start, finish) {
-  //   src = files[src.name];
-  //   console.debug('slice src', src);
-  //   var slice = new Slice(src, start, finish);
+  player.video.addEventListener('slice', function(e) {
+    console.debug('slice', e.detail);
+    var slice = new Slice(e.detail.src, e.detail.start, e.detail.duration);
+    processor.postMessage(slice.workerMessage());
   //   console.debug('slice', slice);
   //   if (slice.image) {
   //     fs.root.getFile(slice.image, {}, function(image) {
@@ -103,6 +104,7 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   //     addSlice(slice);
   //   }
   // };
+  });
 
   $('#files').on('click', '.file', function() {
     var f = files[$(this).data('name')];
