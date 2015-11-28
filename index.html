@@ -84,9 +84,9 @@
     </script>
 
     <script id="slice" type="x-tmpl-mustache">
-      <div class="slice" style="cursor:pointer;" data-id="{{slice.id}}">
-        <img src="{{slice.image}}" height="50px" /><br />
-        {{slice.file.name}}
+      <div class="slice" style="cursor:pointer;" data-name="{{slice.name}}">
+        <img src="" height="50px" /><br />
+        {{slice.mediaFile.name}} (<small>{{slice.start}} - {{slice.finish}}</small>)
       </div>
     </script>
   </body>

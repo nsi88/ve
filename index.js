@@ -11,6 +11,8 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
   var player = new Player({ fs: fs, videoId: 'player', timelineId: 'timeline', controlsId: 'controls' });
   var MediaFile = require('./lib/media_file.js');
   var Slice = require('./lib/slice.js');
+  var slicesQueue = {};
+  var slices = {};
 
   // clear previous files
   var reader = fs.root.createReader();
@@ -52,18 +54,12 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
       });
     } else if (m.attr == 'fragmented' && m.value) {
       console.debug('files', files);
-      //   if (f.type === 'video') {
-      //     for (var sliceId in videoSlices) {
-      //       var slice = videoSlices[sliceId];
-      //       if (slice.file) {
-      //         console.debug(slice);
-      //         if (slice.file.name === file.name) {
-      //           processor.postMessage({ slice: slice.dump() });
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
+      if (slicesQueue[mf.name]) {
+        slicesQueue[mf.name].forEach(function(slice) {
+          processor.postMessage(slice.workerMessage());
+        });
+        delete(slicesQueue[mf.name]);
+      }
     }
   };
 
@@ -76,40 +72,57 @@ webkitRequestFileSystem(TEMPORARY, 1, function(fs) {
     }
   });
 
-  // function addSlice(slice) {
-  //   if (slice.file.type.indexOf('video') === 0) {
-  //     $('#video').append(mustache.render($('#slice').html(), { slice: slice }));
-  //     videoSlices[slice.id] = slice;
-  //     if (slice.file.state == 'ready') {
-  //       processor.postMessage({ slice: slice.dump() });
-  //     } else {
-  //       console.debug('enqueue', slice);
-  //     }
-  //   }
-  // }
+  processor.onmessage = function(event) {
+    var s = event.data;
+    console.debug('processor', s);
+    var slice = slices[s.name];
+    slice[s.attr] = s.value;
+    if (s.attr == 'thumbnail') {
+      fs.root.getFile(slice.thumbnail, {}, function(thumbnail) {
+        console.debug('thumbnail', thumbnail);
+        $('.slice[data-name="' + s.name + '"] img').attr('src', thumbnail.toURL());
+      }, function(err) {
+        console.error(err);
+      });
+    } else if (s.attr == 'fragmented' && s.value) {
+      console.debug('slices', slices);
+    }
+  };
+  
+  function renderSlice(slice) {
+    var container = $('#' + slice.type);
+    slice.finish = slice.finish();
+    var html = mustache.render($('#slice').html(), { slice: slice });
+    if (!container.find('.slice[data-name="' + slice.name + '"]').replaceWith(html).length) {
+      container.append(html);
+    }
+  }
 
   player.video.addEventListener('slice', function(e) {
     console.debug('slice', e.detail);
     var slice = new Slice(e.detail.src, e.detail.start, e.detail.duration);
-    processor.postMessage(slice.workerMessage());
-  //   console.debug('slice', slice);
-  //   if (slice.image) {
-  //     fs.root.getFile(slice.image, {}, function(image) {
-  //       slice.image = image.toURL();
-  //       addSlice(slice);
-  //     }, function(err) {
-  //       console.error(err);
-  //     });
-  //   } else {
-  //     addSlice(slice);
-  //   }
-  // };
+    slices[slice.name] = slice;
+    renderSlice(slice);
+    if (slice.mediaFile.fragmented) {
+      processor.postMessage(slice.workerMessage());
+    } else {
+      console.debug('enqueue', slice, 'to', slicesQueue);
+      slicesQueue[slice.mediaFile.name] = slicesQueue[slice.mediaFile.name] || [];
+      slicesQueue[slice.mediaFile.name].push(slice);
+    }
   });
 
   $('#files').on('click', '.file', function() {
     var f = files[$(this).data('name')];
     console.debug('play', f);
     player.load(f);
+    player.play();
+  });
+
+  $('#video').on('click', '.slice', function() {
+    var s = slices[$(this).data('name')];
+    console.debug('play', s);
+    player.load(s);
     player.play();
   });
 }, function(err) {
